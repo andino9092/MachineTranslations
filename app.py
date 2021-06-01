@@ -4,17 +4,25 @@ from googletrans import Translator, constants
 from pprint import pprint
 import pytesseract
 
+def locateText():
 
-img = Image.open("TestingPics/Lookism.png").convert('L')
+    return
 
-pytesseract.pytesseract.tesseract_cmd = r'Z:\Tesseract\tesseract'
+def locateTextBox():
+    return
 
-print(pytesseract.image_to_string(r'TestingPics\python.jpg'))
+def translate():
+    return
+
+def getStringFromImage():
+    return
+
+pytesseract.pytesseract.tesseract_cmd = r'/opt/local/bin/tesseract'
+img = Image.open("TestingPics/Lookism2_kor.png")
+img = img.convert('L')
+
+find = pytesseract.image_to_data(img, lang="kor")
+print(find[0])
 lookism = pytesseract.image_to_string(img, lang="kor")
-data = pytesseract.image_to_string(r'TestingPics\KoreanRegon.PNG', lang = "kor")
-
-
+data = pytesseract.image_to_string(r'TestingPics/KoreanRegon.PNG', lang = "kor")
 print(lookism)
-
-translation = Translator.translate("hello")
-print(translation)
