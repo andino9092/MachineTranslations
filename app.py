@@ -1,28 +1,90 @@
-from langdetect import detect
-from PIL import Image
-from googletrans import Translator, constants
+from os import remove
+from langdetect import detect, LangDetectException
+from PIL import Image, ImageEnhance
+from deep_translator import GoogleTranslator
 from pprint import pprint
-import pytesseract
+import easyocr
+import string
+
+editLocation = "TestingPics/Edit.png"
+lang = "ko"
+
+def load():
+    global reader
+    reader = easyocr.Reader(['ko', 'en'], gpu = False)
+
+def loadImage(imageLocation):
+    image = Image.open(imageLocation)
+    imgSave = imageEnhance(image).save(editLocation)
+    global rawImageInfo
+    rawImageInfo = reader.readtext(editLocation)
+
+
+def imageEnhance(image):
+    img = image.convert('L')
+    enhancer = ImageEnhance.Contrast(img)
+    newImg = enhancer.enhance(5)
+    return newImg
 
 def locateText():
-
+    #TODO
     return
 
 def locateTextBox():
+    #TODO
     return
 
-def translate():
+def langCheck(phrase):
+    phrase = phrase.translate(str.maketrans("", "", string.punctuation))
+    #print(phrase)
+    symbols = "!@#$%^&*()_-+={}[]"
+    for letter in phrase:
+        try:
+            if detect(letter) == lang and not (letter in symbols) and not letter.isdigit():
+                return True
+        except LangDetectException:
+            pass
+    return False
+
+def removeNoise():
+    clone = rawImageInfo.copy()
+    for box in clone:
+        #print(box)
+        #print(box[1] + " " + str(not langCheck(box[1])))
+        if not langCheck(box[1]):
+            rawImageInfo.remove(box)
+    #print(rawImageInfo)
+
+def createDictionary():
+    langText = []
+    boxes = []
+    for data in rawImageInfo:
+        boxes.append(data[0])
+        langText.append(data[1])
+    global dataDict
+    dataDict = dict(zip(langText, boxes))
+    print(dataDict)
+
+def translateText():
+    text = []
+    for data in rawImageInfo:
+        text.append(data[1])
+    print(text)
+    translated = GoogleTranslator(source = "auto", target = "en").translate_batch(text)
+    print(translated)
+    return text
+
+def translateImage():
+    #TODO
     return
 
-def getStringFromImage():
-    return
+def main():
+    load()
+    loadImage("TestingPics/Lookism3_kor.png")
+    removeNoise()
+    translateText()
+    createDictionary()
 
-pytesseract.pytesseract.tesseract_cmd = r'/opt/local/bin/tesseract'
-img = Image.open("TestingPics/Lookism2_kor.png")
-img = img.convert('L')
+main()
 
-find = pytesseract.image_to_data(img, lang="kor")
-print(find[0])
-lookism = pytesseract.image_to_string(img, lang="kor")
-data = pytesseract.image_to_string(r'TestingPics/KoreanRegon.PNG', lang = "kor")
-print(lookism)
+#maybe use machine learning to train a bot to understand informal korean
