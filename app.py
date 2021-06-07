@@ -13,17 +13,17 @@ import string
 # about how to get one.
 
 editLocation = "TestingPics/Edit.png"
-lang = "ko"
+lang = "ch_tra"
 
 def load():
     global reader
-    reader = easyocr.Reader(['ko', 'en'], gpu = False)
+    reader = easyocr.Reader(['ch_tra'], gpu = False)
 
 def loadImage(imageLocation):
     image = Image.open(imageLocation)
     imgSave = imageEnhance(image).save(editLocation)
     global rawImageInfo
-    rawImageInfo = reader.readtext(editLocation)
+    rawImageInfo = reader.readtext(editLocation, paragraph=True)
 
 
 def imageEnhance(image):
@@ -45,13 +45,15 @@ def langCheck(phrase):
     #print(phrase)
     symbols = "!@#$%^&*()_-+={}[]"
     for letter in phrase:
+        
         try:
-            if detect(letter) == lang and not (letter in symbols) and not letter.isdigit():
+            if detect(letter) == "zh-cn" and not (letter in symbols) and not letter.isdigit():
                 return True
         except LangDetectException:
             pass
     return False
 
+#fix remove noise, not covering text
 def removeNoise():
     clone = rawImageInfo.copy()
     for box in clone:
@@ -86,8 +88,10 @@ def translateImage():
 
 def main():
     load()
-    loadImage("TestingPics/Lookism3_kor.png")
+    loadImage("TestingPics/002.jpg")
+    print(rawImageInfo)
     removeNoise()
+    print(rawImageInfo)
     translateText()
     createDictionary()
 
