@@ -5,6 +5,12 @@ from deep_translator import GoogleTranslator
 from pprint import pprint
 import easyocr
 import string
+# Papago Translator
+# Note
+
+# You need to require a client id and client secret key if you want to
+# use the papago translator. visit the official website for more information 
+# about how to get one.
 
 editLocation = "TestingPics/Edit.png"
 lang = "ko"
