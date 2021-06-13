@@ -1,5 +1,5 @@
 from os import remove
-from PIL import Image, ImageEnhance
+from PIL import Image, ImageEnhance, ImageFont, ImageDraw
 from deep_translator import GoogleTranslator
 from pprint import pprint
 from google_trans_new import google_translator
@@ -80,11 +80,12 @@ def createDictionary(translated):
     global langText
     langText = []
     translations = []
+    index = 0
     for data in rawImageInfo:
-        index = 0
         translations.append(Translation(data[0], translated[index]))
         index += 1
         langText.append(data[1])
+    print(translations)
     global dataDict
     dataDict = dict(zip(langText, translations))
     
@@ -109,9 +110,18 @@ def whiten():
 # [[645, 677], [773, 677], [773, 709], [645, 709]]
 # [[698, 732], [802, 732], [802, 794], [698, 794]]
 # [[99, 877], [239, 877], [239, 917], [99, 917]]
-def translateImage():
-    #TODO
-    return
+
+def writeToImage():
+    font = ImageFont.truetype("wildWords.ttf", 24)
+    whitenedImg = Image.open(editLocation)
+    d = ImageDraw.Draw(whitenedImg)
+    for key in dataDict:
+        boxes = dataDict[key].getBoxes()
+        translated = dataDict[key].getTranslation()
+        print(translated)
+        d.multiline_text(tuple(boxes[3]), translated,spacing = 4, fill = "black", font=font)
+    imgSave = whitenedImg.save(editLocation)
+    whitenedImg.close()
 
 def main():
     load()
@@ -120,6 +130,7 @@ def main():
     translated = translateText()
     createDictionary(translated)
     whiten()
+    writeToImage()
 main()
 
 
