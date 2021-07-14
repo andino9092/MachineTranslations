@@ -2,14 +2,15 @@ from os import remove
 from PIL import Image, ImageEnhance, ImageFont, ImageDraw
 from deep_translator import GoogleTranslator
 from pprint import pprint
-from google_trans_new import google_translator
+from polyglot.detect import Detector
 import easyocr
 import string
+
 
 from torch.utils import data
 
 editLocation = "TestingPics/Edit.png"
-lang = "ch_tra"
+api_key = "a16c615c2b55e8319c15c6b0ee66e7ce"
 
 class Translation:
     def __init__(self, boxes, translation):
@@ -37,7 +38,7 @@ class Box:
 
 def load():
     global reader
-    reader = easyocr.Reader(['ch_tra'], gpu = False)
+    reader = easyocr.Reader(['ch_sim'], gpu = False)
 
 def loadImage(imageLocation):
     global image
@@ -54,16 +55,12 @@ def imageEnhance(image):
 
 # make sure its a phrase and not just symbols
 def langCheck(phrase):
-    translator = google_translator()
     phrase = phrase.translate(str.maketrans("", "", string.punctuation))
     symbols = "!@#$%^&*()_-+={}[]"
-    try:
-        print(translator.detect(phrase))
-        print(phrase)
-        if translator.detect(phrase)[0] == "zh-CN" and not phrase.isdigit():
-            return True
-    except Exception:
-        pass
+    data = Detector(phrase, quiet = True).language.name
+    print(data)
+    if data == "Chinese" and not phrase.isdigit():
+        return True
     return False
 
 #fix remove noise, not covering text
@@ -74,7 +71,7 @@ def removeNoise():
         #print(box[1] + " " + str(not langCheck(box[1])))
         if not langCheck(box[1]):
             rawImageInfo.remove(box)
-    #print(rawImageInfo)
+    print(rawImageInfo)
 
 def createDictionary(translated):
     global langText
@@ -92,6 +89,7 @@ def createDictionary(translated):
 
 def translateText():
     text = []
+    print(text)
     for data in rawImageInfo:
         text.append(data[1])
     translated = GoogleTranslator(source = "auto", target = "en").translate_batch(text)
@@ -111,6 +109,14 @@ def whiten():
 # [[698, 732], [802, 732], [802, 794], [698, 794]]
 # [[99, 877], [239, 877], [239, 917], [99, 917]]
 
+# finds center of textbox
+def findCenter():
+    return
+
+# sentence structure
+def splitSentence():
+    return
+
 def writeToImage():
     font = ImageFont.truetype("wildWords.ttf", 24)
     whitenedImg = Image.open(editLocation)
@@ -119,7 +125,9 @@ def writeToImage():
         boxes = dataDict[key].getBoxes()
         translated = dataDict[key].getTranslation()
         print(translated)
-        d.multiline_text(tuple(boxes[3]), translated,spacing = 4, fill = "black", font=font)
+        boxes[3][0] = boxes[3][0] + 4
+        boxes[3][1] = boxes[3][1] + 4
+        d.multiline_text(tuple(boxes[3]), translated, spacing = 4, fill = "black", font=font)
     imgSave = whitenedImg.save(editLocation)
     whitenedImg.close()
 
