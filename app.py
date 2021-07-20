@@ -5,13 +5,21 @@ from pprint import pprint
 from polyglot.detect import Detector
 import easyocr
 import string
+import textwrap
 
 
 from torch.utils import data
 
 editLocation = "TestingPics/Edit.png"
 api_key = "a16c615c2b55e8319c15c6b0ee66e7ce"
+fontSize = 18
 
+fontDict = {
+    16: 21,
+    18: 24,
+    20: 27,
+    24: 32,
+}
 class Translation:
     def __init__(self, boxes, translation):
         self.boxes = boxes
@@ -20,21 +28,6 @@ class Translation:
         return self.translation
     def getBoxes(self):
         return self.boxes
-
-class Box:
-    def __init__(self, a, b, c, d):
-        self.topLeft = a
-        self.topRight = b
-        self.bottomLeft = c
-        self.bottomRight = d
-    def getTopLeft(self):
-        return self.topLeft
-    def getTopRight(self):
-        return self.topRight
-    def getBottomLeft(self):
-        return self.bottomLeft
-    def getBottomRight(self):
-        return self.bottomRight
 
 def load():
     global reader
@@ -109,31 +102,43 @@ def whiten():
 # [[698, 732], [802, 732], [802, 794], [698, 794]]
 # [[99, 877], [239, 877], [239, 917], [99, 917]]
 
-# finds center of textbox
-def findCenter():
-    return
+def splitTranslation(boxes, translated):
+    pixelSize = fontDict[fontSize]
+    threshold = boxes[1][0] - boxes[0][0] 
+    translatedList = translated.split(" ")
+    newTranslation = ""
+    currentPixels = 0
+    for line in translatedList:
+        lineSize = len(line) * pixelSize
+        if len(translatedList) == 1:
+            newTranslation += line
+            break
+        if currentPixels + lineSize - 50 > threshold:
+            newTranslation += "\n" + line + " "
+            currentPixels = 0
+        else:
+            newTranslation += line + " "
+            currentPixels += lineSize
+    return newTranslation
 
-# sentence structure
-def splitSentence():
-    return
+def findMiddle(boxes):
+    return (boxes[0][0] + (boxes[1][0] - boxes[0][0]) / 2, boxes[0][1] + (boxes[2][1] - boxes[0][1]) / 2) 
 
 def writeToImage():
-    font = ImageFont.truetype("wildWords.ttf", 24)
+    font = ImageFont.truetype("wildWords.ttf", fontSize)
     whitenedImg = Image.open(editLocation)
     d = ImageDraw.Draw(whitenedImg)
     for key in dataDict:
         boxes = dataDict[key].getBoxes()
         translated = dataDict[key].getTranslation()
-        print(translated)
-        boxes[3][0] = boxes[3][0] + 4
-        boxes[3][1] = boxes[3][1] + 4
-        d.multiline_text(tuple(boxes[3]), translated, spacing = 4, fill = "black", font=font)
+        print(splitTranslation(boxes, translated))
+        d.text(findMiddle(boxes), splitTranslation(boxes, translated), anchor = "mm", spacing = 10, fill = "black", align = "center", font=font)
     imgSave = whitenedImg.save(editLocation)
     whitenedImg.close()
 
 def main():
     load()
-    loadImage("TestingPics/002.jpg")
+    loadImage("TestingPics/009.jpg")
     removeNoise()
     translated = translateText()
     createDictionary(translated)
@@ -141,7 +146,12 @@ def main():
     writeToImage()
 main()
 
-
+# Improvements that could be made:
+# - Let program scan multiple files
+# - change background to whatever closest color is rather than just white
+# - Fix scaling of words
+# - Convert into an executable
+# 
 # Dictionary for boxes: dataDict
 # Array for raw text: langText
 # Idea for another project: maybe use machine learning to train a bot to understand informal korean
