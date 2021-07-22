@@ -136,7 +136,7 @@ def writeToImage():
     imgSave = whitenedImg.save(editLocation)
     whitenedImg.close()
 
-def main():
+def translate():
     load()
     loadImage("TestingPics/009.jpg")
     removeNoise()
@@ -144,7 +144,7 @@ def main():
     createDictionary(translated)
     whiten()
     writeToImage()
-main()
+translate()
 
 # Improvements that could be made:
 # - Let program scan multiple files
