@@ -31,6 +31,7 @@ langdetect==1.0.9
 langid==1.1.6
 matplotlib==3.4.2
 Morfessor @ file:///Z:/MachineTranslations/Morfessor-2.0.6-py3-none-any.whl
+MouseInfo==0.1.3
 networkx==2.5.1
 nltk==3.6.2
 numpy==1.20.3
@@ -38,14 +39,20 @@ opencv-python==4.5.2.52
 Pillow==8.2.0
 polyglot==16.7.4
 pycld2 @ file:///Z:/MachineTranslations/pycld2-0.41-cp39-cp39-win_amd64.whl
+PyGetWindow==0.0.9
 Pygments==2.9.0
 PyICU @ file:///Z:/MachineTranslations/PyICU-2.7.4-cp39-cp39-win_amd64.whl
 pyinstaller-hooks-contrib==2021.2
+PyMsgBox==1.0.9
 pyparsing==2.4.7
+pyperclip==1.8.2
 pypiwin32==223
+PyRect==0.1.4
+PyScreeze==0.1.27
 pytesseract==0.3.7
 python-bidi==0.4.2
 python-dateutil==2.8.1
+PyTweening==1.0.3
 PyWavelets==1.1.1
 pywin32==301
 PyYAML==5.4.1

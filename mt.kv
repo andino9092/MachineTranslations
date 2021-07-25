@@ -1,0 +1,22 @@
+#:kivy 1.0.9
+
+<IntroLabel>:
+    text: "Welcome to Machine Translations! This is a machine translation tool for manwha, manhua, and manga. I hope you enjoy!"
+
+<FolderButton>:
+    size_hint: .5, .5
+    text: "Select a folder"
+    font_size: 20
+
+<UI>:
+    
+    folderButton: folder_button
+
+    IntroLabel: 
+        id: introText
+        center: self.parent.center_x , 700
+
+    FolderButton: 
+        id: folder_button
+        center: self.parent.center_x, 500
+    

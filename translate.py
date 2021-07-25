@@ -20,6 +20,7 @@ fontDict = {
     20: 27,
     24: 32,
 }
+
 class Translation:
     def __init__(self, boxes, translation):
         self.boxes = boxes
@@ -144,7 +145,6 @@ def translate():
     createDictionary(translated)
     whiten()
     writeToImage()
-translate()
 
 # Improvements that could be made:
 # - Let program scan multiple files
