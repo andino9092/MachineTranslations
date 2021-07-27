@@ -6,13 +6,13 @@ from polyglot.detect import Detector
 import easyocr
 import string
 import textwrap
+import os
 
 
 from torch.utils import data
 
-editLocation = "TestingPics/Edit.png"
-api_key = "a16c615c2b55e8319c15c6b0ee66e7ce"
-fontSize = 18
+editLocation = "Edit.png"
+fontPath = "Z:\MachineTranslations\wildWords.tff"
 
 fontDict = {
     16: 21,
@@ -125,8 +125,7 @@ def splitTranslation(boxes, translated):
 def findMiddle(boxes):
     return (boxes[0][0] + (boxes[1][0] - boxes[0][0]) / 2, boxes[0][1] + (boxes[2][1] - boxes[0][1]) / 2) 
 
-def writeToImage():
-    font = ImageFont.truetype("wildWords.ttf", fontSize)
+def writeToImage(font):
     whitenedImg = Image.open(editLocation)
     d = ImageDraw.Draw(whitenedImg)
     for key in dataDict:
@@ -137,14 +136,21 @@ def writeToImage():
     imgSave = whitenedImg.save(editLocation)
     whitenedImg.close()
 
-def translate():
-    load()
-    loadImage("TestingPics/009.jpg")
+def translate(fileName, targetDirectory, fSize, font, easyocReader):
+    global fontSize
+    fontSize = fSize
+    global reader
+    reader = easyocReader
+    loadImage(fileName)
     removeNoise()
     translated = translateText()
     createDictionary(translated)
     whiten()
-    writeToImage()
+    writeToImage(font)
+    edited = Image.open(editLocation)
+    fileArray = fileName.split(".")
+    renamed = fileArray[0] + "_MT." + fileArray[1]
+    edited.save(targetDirectory + "/" + renamed)
 
 # Improvements that could be made:
 # - Let program scan multiple files
