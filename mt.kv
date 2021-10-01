@@ -2,26 +2,41 @@
 
 <IntroLabel>:
     text: "Welcome to Machine Translations! This is a machine translation tool for manwha, manhua, and manga. I hope you enjoy!"
+    font_size : 20
+    font_name: "WildWords"
+    text_size: cm(15), cm(4)
+    halign: 'center'
+    
+
 
 <FolderButton>:
-    size_hint: .5, .5
-    text: "Select a folder"
+    size_hint: 4, 4
+    text: "Select a Folder"
     font_size: 20
+    size: 200, 100
 
 <UI>:
-    
     folderButton: folder_button
     authorLabel: author_label
+    Image:
+        id: gif
+        source: 'background.gif'
+        center: self.parent.center
+        size: 1080, 720
+        allow_stretch: "True"
 
     AuthorLabel: 
         id: author_label
-        center: self.parent.center_x,  250
+        center: self.parent.center_x,  100
 
     IntroLabel: 
         id: introText
-        center: self.parent.center_x , 700
+        center: self.parent.center_x , 600
+        size: 1000 , 1000
 
     FolderButton: 
         id: folder_button
-        center: self.parent.center_x, 500
+        center: self.parent.center_x, 200
+    
+
     

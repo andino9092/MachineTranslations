@@ -32,7 +32,7 @@ class Translation:
 
 def load():
     global reader
-    reader = easyocr.Reader(['ch_sim'], gpu = False)
+    reader = easyocr.Reader(['ch_sim', 'en', 'ko', 'ja'], gpu = False)
 
 def loadImage(imageLocation):
     global image
@@ -153,11 +153,15 @@ def translate(fileName, targetDirectory, fSize, font, easyocReader):
     edited.save(targetDirectory + "/" + renamed)
 
 # Improvements that could be made:
-# - Let program scan multiple files
+# - (DONE) Let program scan multiple files
 # - change background to whatever closest color is rather than just white
 # - Fix scaling of words
 # - Convert into an executable
-# 
+# - Find differenct translator for faster translation
+# - Add font size choice for 4 selections
+#
+#
+#
 # Dictionary for boxes: dataDict
 # Array for raw text: langText
 # Idea for another project: maybe use machine learning to train a bot to understand informal korean
