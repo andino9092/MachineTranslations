@@ -5,7 +5,7 @@ This is a tool to provide quick satisfaction to those who cannot wait for offici
 HOW TO USE:
 
 1. Run main.py
-2. Select the folder where the images from the manga are
-3. Wait and read!
+2. Select the folder where the images from the manga are in
+4. Wait and read!
 
 Created by Andy Li.
