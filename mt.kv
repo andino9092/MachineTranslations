@@ -1,7 +1,7 @@
 #:kivy 1.0.9
 
 <IntroLabel>:
-    text: "Welcome to Machine Translations! This is a machine translation tool for manwha, manhua, and manga. I hope you enjoy!"
+    text: "Welcome to Machine Translations! This is a machine translation tool for manwha, manhua, and manga. I hope this is helpful!"
     font_size : 20
     font_name: "WildWords"
     text_size: cm(15), cm(4)
@@ -18,12 +18,15 @@
 <UI>:
     folderButton: folder_button
     authorLabel: author_label
+    gif: gif
     Image:
         id: gif
-        source: 'background.gif'
+        source: 'cover.gif'
         center: self.parent.center
-        size: 1080, 720
+        size: 200, 200
         allow_stretch: "True"
+        anim_delay: .1
+        keep_data: "True"
 
     AuthorLabel: 
         id: author_label
@@ -37,6 +40,7 @@
     FolderButton: 
         id: folder_button
         center: self.parent.center_x, 200
-    
+
+
 
     

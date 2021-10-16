@@ -10,16 +10,21 @@ from kivy.lang import Builder
 from tkinter import Tk, filedialog
 from PIL import Image, ImageFont
 from kivy.uix.dropdown import DropDown
+from kivy.factory import Factory
+from kivy.uix.popup import Popup
 import easyocr
 import os
 import translate
+import threading
+import time
 
 Tk().withdraw()
 
-Window.size = (1080, 720)
+Window.size = (540, 720)
 
 fontSize = 16
 reader = easyocr.Reader(['ch_sim'])
+loading = False
 
 langs = ["Chinese", "Korean", "Japanese"]
 
@@ -35,13 +40,16 @@ class UI(Widget):
         self.minimum_height = 1
         self.minimum_width = 3
         self.folderButton.bind(on_release = FolderButton.callback)
-        self.authorLabel.text = "Creator: Andy Li"
+        self.authorLabel.text = "Andy Li"
 
 class FolderButton(Button):
     
-    def callback(instance):
+    def callback(self):
         font = ImageFont.truetype("wildWords.ttf", fontSize)
         folderName = filedialog.askdirectory()
+        if folderName == "":
+            return
+        
         print(folderName)
         fileList = os.listdir(folderName)
         os.chdir(folderName)
@@ -54,9 +62,10 @@ class FolderButton(Button):
         for file in fileList:
             translate.translate(file, targetDirectory, fontSize, font, reader)
 
-class MainButton(Button):
-    def callback(instance, value):
-        print(instance + " " + value)
+    
+
+class LoadingPopup(Popup):
+    pass
 
 class AuthorLabel(Label):
     pass
