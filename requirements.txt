@@ -38,7 +38,7 @@ tekore==3.5.0
 tifffile==2021.4.8
 torch==1.8.1
 typing-extensions==3.10.0.0
-urllib3==1.26.4
+urllib3==1.26.5
 virtualenv==20.4.2
 Werkzeug==1.0.1
 zope.event==4.5.0
