@@ -1,17 +1,13 @@
 from kivy.app import App
 from kivy.core.window import Window
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.properties import ObjectProperty
 from kivy.uix.widget import Widget
 from kivy.core.text import LabelBase
-from kivy.lang import Builder
 from tkinter import Tk, filedialog
 from PIL import Image, ImageFont
 from kivy.uix.dropdown import DropDown
-from kivy.factory import Factory
-from kivy.uix.popup import Popup
 import easyocr
 import os
 import translate
@@ -43,29 +39,33 @@ class UI(Widget):
         self.authorLabel.text = "Andy Li"
 
 class FolderButton(Button):
+
+    gif = ObjectProperty(None)
     
     def callback(self):
         font = ImageFont.truetype("wildWords.ttf", fontSize)
         folderName = filedialog.askdirectory()
         if folderName == "":
             return
-        
-        print(folderName)
-        fileList = os.listdir(folderName)
-        os.chdir(folderName)
-        if os.path.isdir("Translated"):
-            pass
         else:
-            os.mkdir("Translated")
-        targetDirectory = folderName + "/Translated"
-        print(fileList)
+            self.gif.source = 'loading.gif'
+            time.sleep(10)
+            print(folderName)
+            fileList = os.listdir(folderName)
+            os.chdir(folderName)
+            if os.path.isdir("Translated"):
+                pass
+            else:
+                os.mkdir("Translated")
+            targetDirectory = folderName + "/Translated"
+            print(fileList)
+            t = threading.Thread(target=self.helper, args=(fileList, 
+              targetDirectory, fontSize, font, reader))
+            t.start()
+    def helper(self, fileList, targetDirectory, fontSize, font, reader):
         for file in fileList:
             translate.translate(file, targetDirectory, fontSize, font, reader)
 
-    
-
-class LoadingPopup(Popup):
-    pass
 
 class AuthorLabel(Label):
     pass

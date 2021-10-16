@@ -18,15 +18,6 @@
 <UI>:
     folderButton: folder_button
     authorLabel: author_label
-    gif: gif
-    Image:
-        id: gif
-        source: 'cover.gif'
-        center: self.parent.center
-        size: 200, 200
-        allow_stretch: "True"
-        anim_delay: .1
-        keep_data: "True"
 
     AuthorLabel: 
         id: author_label
@@ -38,8 +29,17 @@
         size: 1000 , 1000
 
     FolderButton: 
+        gif: gify
         id: folder_button
         center: self.parent.center_x, 200
+        Image:
+            id: gify
+            source: 'cover.gif'
+            center: self.parent.parent.center
+            size: 200, 200
+            allow_stretch: "True"
+            anim_delay: .1
+            keep_data: "True"
 
 
 
